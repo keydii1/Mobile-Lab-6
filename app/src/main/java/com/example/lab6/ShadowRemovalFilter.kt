@@ -13,11 +13,12 @@ import java.util.concurrent.Executors
 
 object ShadowRemovalFilter {
     interface Callback {
-        fun onComplete(bitmap: Bitmap)
+        fun onComplete(bitmap: Bitmap, executionTimeMs: Long, width: Int, height: Int)
     }
 
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
+
 
     fun getShadowFilteredImage(bitmap: Bitmap, callback: Callback) {
         executor.execute {
