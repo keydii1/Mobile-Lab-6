@@ -90,16 +90,16 @@ class MainActivity : AppCompatActivity() {
      * Generates a high-quality mock document page featuring dark gradient shadow overlays,
      * simulating a real-world shadowed book page.
      */
-    private fun loadSampleDocument() {
+    private fun loadSampleBookPage() {
         val width = 800
         val height = 1000
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         
-        // 1. Draw Page Background
+        // Draw Page Background
         canvas.drawColor(Color.WHITE)
 
-        // 2. Draw Page Margins/Border
+        // Draw Page Margins/Border
         val borderPaint = Paint().apply {
             color = Color.LTGRAY
             style = Paint.Style.STROKE
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         }
         canvas.drawRect(20f, 20f, width - 20f, height - 20f, borderPaint)
 
-        // 3. Draw Document Content
+        // Draw Document Content
         val paint = Paint().apply {
             color = Color.BLACK
             isAntiAlias = true
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
             yPos += 32f
         }
 
-        // 4. Overlay Severe Dark Shadow (Linear Gradient from Bottom-Right towards Center)
+        // Overlay Severe Dark Shadow (Linear Gradient from Bottom-Right towards Center)
         val shadowPaint = Paint().apply {
             isAntiAlias = true
         }
@@ -185,19 +185,198 @@ class MainActivity : AppCompatActivity() {
         shadowPaint.shader = gradient
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shadowPaint)
 
-        // Set as current bitmap
-        currentBitmap = bitmap
+        setOriginalBitmap(bitmap)
+        Toast.makeText(this, "Sample Book Page Loaded!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun loadSampleReceipt() {
+        val width = 600
+        val height = 1000
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        // Cream background for receipt
+        canvas.drawColor(Color.rgb(250, 247, 238))
+
+        val paint = Paint().apply {
+            color = Color.rgb(40, 40, 40)
+            isAntiAlias = true
+        }
+
+        // Dotted side lines
+        val linePaint = Paint().apply {
+            color = Color.rgb(220, 215, 200)
+            strokeWidth = 3f
+        }
+        canvas.drawLine(15f, 0f, 15f, height.toFloat(), linePaint)
+        canvas.drawLine(width - 15f, 0f, width - 15f, height.toFloat(), linePaint)
+
+        // Store details
+        paint.textSize = 32f
+        paint.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
+        canvas.drawText("OPENCV SMART SUPERMARKET", 40f, 90f, paint)
+
+        paint.textSize = 20f
+        paint.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+        canvas.drawText("123 OpenCV Boulevard, Tech City", 45f, 130f, paint)
+        canvas.drawText("TEL: (0123) 456-789", 45f, 160f, paint)
+
+        paint.color = Color.rgb(120, 120, 120)
+        canvas.drawText("-------------------------------------", 30f, 200f, paint)
+
+        // Receipt items
+        paint.color = Color.rgb(30, 30, 30)
+        var yPos = 250f
+        val items = listOf(
+            "1x OpenCV Integration   $49.00",
+            "2x Shadow Filter SDK   $20.00",
+            "1x Premium UI Layout   $15.00",
+            "3x Android Dev Guide   $30.00",
+            "5x Kotlin Coding Mug   $25.00"
+        )
+        for (item in items) {
+            canvas.drawText(item, 45f, yPos, paint)
+            yPos += 45f
+        }
+
+        paint.color = Color.rgb(120, 120, 120)
+        canvas.drawText("-------------------------------------", 30f, yPos, paint)
+        yPos += 50f
+
+        // Total
+        paint.color = Color.rgb(10, 10, 10)
+        paint.textSize = 26f
+        paint.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
+        canvas.drawText("TOTAL AMOUNT:        $139.00", 40f, yPos, paint)
+        yPos += 60f
+
+        paint.textSize = 18f
+        paint.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC)
+        canvas.drawText("Thank you for shopping with us!", 60f, yPos, paint)
+        yPos += 35f
+        canvas.drawText("Powered by Mobile Lab 6 Engine", 65f, yPos, paint)
+
+        // Spotlight circular shadow overlay (RadialGradient)
+        val shadowPaint = Paint().apply { isAntiAlias = true }
+        val center = RadialGradient(
+            width * 0.5f, height * 0.3f, // Spotlight center
+            width * 0.75f,               // Spotlight radius
+            intArrayOf(Color.TRANSPARENT, Color.argb(130, 30, 30, 30), Color.argb(230, 5, 5, 5)),
+            floatArrayOf(0.0f, 0.6f, 1.0f),
+            Shader.TileMode.CLAMP
+        )
+        shadowPaint.shader = center
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shadowPaint)
+
+        setOriginalBitmap(bitmap)
+        Toast.makeText(this, "Sample Thermal Receipt Loaded!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun loadSampleGridNote() {
+        val width = 800
+        val height = 1000
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        // Yellow legal pad background
+        canvas.drawColor(Color.rgb(255, 253, 208))
+
+        // Draw horizontal grid lines
+        val linePaint = Paint().apply {
+            color = Color.rgb(173, 216, 230) // light blue
+            strokeWidth = 2f
+        }
+        var lineY = 60f
+        while (lineY < height) {
+            canvas.drawLine(0f, lineY, width.toFloat(), lineY, linePaint)
+            lineY += 40f
+        }
+
+        // Left vertical margin line in red
+        val marginPaint = Paint().apply {
+            color = Color.rgb(255, 182, 193) // light pinkish-red
+            strokeWidth = 4f
+        }
+        canvas.drawLine(100f, 0f, 100f, height.toFloat(), marginPaint)
+
+        // Write handwritten text
+        val textPaint = Paint().apply {
+            color = Color.rgb(0, 0, 128) // blue ink
+            isAntiAlias = true
+            textSize = 24f
+            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC)
+        }
+
+        // Title
+        textPaint.textSize = 32f
+        textPaint.typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+        canvas.drawText("MEMO: OPENCV SHADOW STUDY", 120f, 100f, textPaint)
+
+        textPaint.textSize = 24f
+        textPaint.typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC)
+        
+        val lines = listOf(
+            "1. Test Otsu binarization performance on yellow paper.",
+            "2. Validate adaptive threshold block size limits.",
+            "3. Measure execution speed for high resolution scans.",
+            "4. Check for native memory leakage of OpenCV Mats.",
+            "5. Re-stretch contrast to get clean white backgrounds.",
+            "",
+            "NOTES ON ADAPTIVE THRESHOLDING:",
+            "- Block size must be odd (e.g., 15, 25, 45).",
+            "- Constant C subtracts offset from weighted mean.",
+            "- Helps isolate handwriting from non-uniform shadows."
+        )
+
+        var yPos = 180f
+        for (line in lines) {
+            canvas.drawText(line, 120f, yPos, textPaint)
+            yPos += 40f
+        }
+
+        // Complex uneven shadow: overlapping linear gradient shadows
+        val shadowPaint1 = Paint().apply { isAntiAlias = true }
+        val linearGrad1 = LinearGradient(
+            0f, 0f, width * 0.8f, height * 0.8f,
+            intArrayOf(Color.argb(120, 20, 20, 20), Color.TRANSPARENT),
+            floatArrayOf(0.0f, 1.0f),
+            Shader.TileMode.CLAMP
+        )
+        shadowPaint1.shader = linearGrad1
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shadowPaint1)
+
+        val shadowPaint2 = Paint().apply { isAntiAlias = true }
+        val linearGrad2 = LinearGradient(
+            width.toFloat(), height.toFloat(), width * 0.3f, height * 0.3f,
+            intArrayOf(Color.argb(160, 10, 10, 10), Color.TRANSPARENT),
+            floatArrayOf(0.0f, 1.0f),
+            Shader.TileMode.CLAMP
+        )
+        shadowPaint2.shader = linearGrad2
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shadowPaint2)
+
+        setOriginalBitmap(bitmap)
+        Toast.makeText(this, "Sample Grid Note Loaded!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setOriginalBitmap(bitmap: Bitmap) {
+        originalBitmap = bitmap
+        processedBitmap = null
+        isShowingOriginal = false
+        
         binding.ivOriginal.setImageBitmap(bitmap)
         binding.ivOriginal.clearColorFilter()
         binding.tvOriginalPlaceholder.visibility = View.GONE
 
-        // Reset Filter result state
+        // Clear previous processed image preview
         binding.ivFiltered.setImageBitmap(null)
         binding.tvFilteredPlaceholder.visibility = View.VISIBLE
         binding.tvFilteredPlaceholder.text = "Run filter to see result"
 
-        Toast.makeText(this, "Sample Document with Shadow Loaded!", Toast.LENGTH_SHORT).show()
+        // Hide performance statistics view until processed
+        binding.statsContainer.visibility = View.GONE
     }
+
 
     /**
      * Applies the OpenCV shadow removal process on the currently loaded image.
