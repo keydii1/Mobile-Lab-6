@@ -378,11 +378,29 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun getDilationSize() = binding.sbDilation.progress.coerceAtLeast(1)
+    
+    private fun getMedianBlurSize() = (binding.sbMedianBlur.progress * 2) + 1
+    
+    private fun getBlockSize() = (binding.sbBlockSize.progress * 2) + 3
+    
+    private fun getConstantC() = (binding.sbConstantC.progress - 20).toDouble()
+    
+    private fun getFilterType(): String {
+        return when (binding.filterModeChipGroup.checkedChipId) {
+            R.id.chipFilterColor -> "color"
+            R.id.chipFilterGray -> "grayscale"
+            R.id.chipFilterOtsu -> "otsu"
+            R.id.chipFilterAdaptive -> "adaptive"
+            else -> "color"
+        }
+    }
+
     /**
      * Applies the OpenCV shadow removal process on the currently loaded image.
      */
     private fun applyShadowRemoval() {
-        val bitmap = currentBitmap
+        val bitmap = originalBitmap
         if (bitmap == null) {
             Toast.makeText(this, "Please load a sample or select an image first", Toast.LENGTH_SHORT).show()
             return
@@ -393,19 +411,42 @@ class MainActivity : AppCompatActivity() {
         binding.btnRemoveShadow.text = ""
         binding.btnRemoveShadow.isEnabled = false
 
-        ShadowRemovalFilter.getShadowFilteredImage(bitmap, object : ShadowRemovalFilter.Callback {
-            override fun onComplete(bitmap: Bitmap) {
-                // Render Processed Image
-                binding.ivFiltered.setImageBitmap(bitmap)
-                binding.tvFilteredPlaceholder.visibility = View.GONE
+        val dSize = getDilationSize()
+        val mSize = getMedianBlurSize()
+        val filter = getFilterType()
+        val bSize = getBlockSize()
+        val constC = getConstantC()
 
-                // Hide Progress Bar and restore button
-                binding.progressBar.visibility = View.GONE
-                binding.btnRemoveShadow.text = "Remove Shadow (OpenCV)"
-                binding.btnRemoveShadow.isEnabled = true
+        ShadowRemovalFilter.getShadowFilteredImage(
+            bitmap = bitmap,
+            dilationSize = dSize,
+            blurSize = mSize,
+            filterType = filter,
+            blockSize = bSize,
+            constantC = constC,
+            callback = object : ShadowRemovalFilter.Callback {
+                override fun onComplete(resultBitmap: Bitmap, executionTimeMs: Long, width: Int, height: Int) {
+                    processedBitmap = resultBitmap
+                    isShowingOriginal = false
 
-                Toast.makeText(this@MainActivity, "Shadow Removed Successfully!", Toast.LENGTH_SHORT).show()
+                    // Render Processed Image
+                    binding.ivFiltered.setImageBitmap(resultBitmap)
+                    binding.tvFilteredPlaceholder.visibility = View.GONE
+
+                    // Update Stats Container
+                    binding.tvResolution.text = getString(R.string.lbl_resolution, width, height)
+                    binding.tvExecutionTime.text = getString(R.string.lbl_time_taken, executionTimeMs)
+                    binding.statsContainer.visibility = View.VISIBLE
+
+                    // Hide Progress Bar and restore button
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnRemoveShadow.text = getString(R.string.btn_apply_filter)
+                    binding.btnRemoveShadow.isEnabled = true
+
+                    Toast.makeText(this@MainActivity, "Shadow Removed Successfully!", Toast.LENGTH_SHORT).show()
+                }
             }
-        })
+        )
     }
 }
+
