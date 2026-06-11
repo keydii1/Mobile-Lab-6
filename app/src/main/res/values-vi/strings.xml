@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bộ Lọc Tài Liệu</string>
+    <string name="title_activity_main">Bộ Lọc OpenCV</string>
+    
+    <!-- Presets Labels -->
+    <string name="lbl_presets">Chọn loại tài liệu mẫu</string>
+    <string name="preset_book">Trang Sách</string>
+    <string name="preset_receipt">Hóa Đơn</string>
+    <string name="preset_note">Ghi Chú Ô Ly</string>
+    <string name="preset_custom">Tùy Chọn</string>
+    
+    <!-- Filter Modes -->
+    <string name="lbl_filter_mode">Thuật toán xử lý OpenCV</string>
+    <string name="filter_color">Khử bóng (Màu)</string>
+    <string name="filter_gray">Khử bóng (Xám)</string>
+    <string name="filter_binary">Nhị phân Otsu (Trắng Đen)</string>
+    <string name="filter_adaptive">Nhị phân thích nghi</string>
+    
+    <!-- Slider Labels -->
+    <string name="lbl_dilation_kernel">Kích thước nhân nở ảnh (Dilation): %1$d</string>
+    <string name="lbl_median_blur">Kích thước hạt làm mờ (Median Blur): %1$d</string>
+    <string name="lbl_block_size">Kích thước vùng nhị phân (Block Size): %1$d</string>
+    <string name="lbl_constant_c">Hằng số dịch C (Constant C): %1$.1f</string>
+    
+    <!-- Section Labels -->
+    <string name="lbl_adv_settings">Bảng Điều Khiển Nâng Cao</string>
+    <string name="lbl_performance_stats">Thông Số Động Cơ OpenCV</string>
+    <string name="lbl_resolution">Độ phân giải: %1$d x %2$d px</string>
+    <string name="lbl_time_taken">Thời gian xử lý: %1$d ms</string>
+    
+    <!-- Button text -->
+    <string name="btn_apply_filter">Xử lý loại bỏ bóng đổ</string>
+    <string name="btn_reset">Đặt lại cấu hình mặc định</string>
+    <string name="btn_compare_hold">Nhấn giữ để xem ảnh gốc</string>
+</resources>
