@@ -18,4 +18,12 @@
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/text_primary</item>
     </style>
+
+    <!-- Custom Slider style override -->
+    <style name="Widget.Lab6.Slider" parent="Widget.Material3.Slider">
+        <item name="thumbColor">@color/primary</item>
+        <item name="trackColorActive">@color/secondary</item>
+        <item name="trackColorInactive">@color/surface_card</item>
+    </style>
 </resources>
+
