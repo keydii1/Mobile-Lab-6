@@ -37,7 +37,10 @@ class MainActivity : AppCompatActivity() {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
                 // Convert bitmap to ARGB_8888 to ensure compatibility with OpenCV
                 val argbBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                currentBitmap = argbBitmap
+                originalBitmap = argbBitmap
+                processedBitmap = null
+                isShowingOriginal = false
+                
                 binding.ivOriginal.setImageBitmap(argbBitmap)
                 binding.ivOriginal.clearColorFilter()
                 binding.tvOriginalPlaceholder.visibility = View.GONE
@@ -46,12 +49,16 @@ class MainActivity : AppCompatActivity() {
                 binding.ivFiltered.setImageBitmap(null)
                 binding.tvFilteredPlaceholder.visibility = View.VISIBLE
                 binding.tvFilteredPlaceholder.text = "Run filter to see result"
+                
+                // Hide stats view
+                binding.statsContainer.visibility = View.GONE
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
