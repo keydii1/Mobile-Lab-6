@@ -378,6 +378,60 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun setupSeekBars() {
+        // Dilation SeekBar
+        binding.sbDilation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val safeProgress = progress.coerceAtLeast(1)
+                binding.tvDilationLabel.text = getString(R.string.lbl_dilation_kernel, safeProgress)
+                if (fromUser) {
+                    binding.presetChipGroup.check(R.id.chipPresetCustom)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // Median Blur SeekBar
+        binding.sbMedianBlur.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val actual = (progress * 2) + 1
+                binding.tvMedianBlurLabel.text = getString(R.string.lbl_median_blur, actual)
+                if (fromUser) {
+                    binding.presetChipGroup.check(R.id.chipPresetCustom)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // Block Size SeekBar
+        binding.sbBlockSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val actual = (progress * 2) + 3
+                binding.tvBlockSizeLabel.text = getString(R.string.lbl_block_size, actual)
+                if (fromUser) {
+                    binding.presetChipGroup.check(R.id.chipPresetCustom)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // Constant C SeekBar
+        binding.sbConstantC.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val actual = (progress - 20).toDouble()
+                binding.tvConstantCLabel.text = getString(R.string.lbl_constant_c, actual)
+                if (fromUser) {
+                    binding.presetChipGroup.check(R.id.chipPresetCustom)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+    }
+
     private fun getDilationSize() = binding.sbDilation.progress.coerceAtLeast(1)
     
     private fun getMedianBlurSize() = (binding.sbMedianBlur.progress * 2) + 1
