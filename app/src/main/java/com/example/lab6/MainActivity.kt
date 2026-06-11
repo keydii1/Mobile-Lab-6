@@ -378,6 +378,34 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun setupComparison() {
+        binding.btnCompare.setOnTouchListener { view, event ->
+            val orig = originalBitmap
+            val proc = processedBitmap
+            if (orig != null && proc != null) {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        binding.ivFiltered.setImageBitmap(orig)
+                        Toast.makeText(this, "Showing original document...", Toast.LENGTH_SHORT).show()
+                        view.isPressed = true
+                        true
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        binding.ivFiltered.setImageBitmap(proc)
+                        view.isPressed = false
+                        true
+                    }
+                    else -> false
+                }
+            } else {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    Toast.makeText(this, "Run filter first to compare", Toast.LENGTH_SHORT).show()
+                }
+                false
+            }
+        }
+    }
+
     private fun setupPresets() {
         binding.presetChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             if (checkedIds.isEmpty()) return@setOnCheckedStateChangeListener
