@@ -72,9 +72,19 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "OpenCV Initialization Failed!", Toast.LENGTH_LONG).show()
         }
 
+        // Setup UI components and listeners
+        setupPresets()
+        setupSeekBars()
+        setupComparison()
+
         // Set Click Listeners
         binding.btnLoadSample.setOnClickListener {
-            loadSampleDocument()
+            when (binding.presetChipGroup.checkedChipId) {
+                R.id.chipPresetBook -> loadSampleBookPage()
+                R.id.chipPresetReceipt -> loadSampleReceipt()
+                R.id.chipPresetNote -> loadSampleGridNote()
+                else -> loadSampleBookPage()
+            }
         }
 
         binding.btnSelectImage.setOnClickListener {
@@ -84,7 +94,15 @@ class MainActivity : AppCompatActivity() {
         binding.btnRemoveShadow.setOnClickListener {
             applyShadowRemoval()
         }
+
+        binding.btnReset.setOnClickListener {
+            resetSliders()
+        }
+
+        // Load default Book Page template at startup
+        loadSampleBookPage()
     }
+
 
     /**
      * Generates a high-quality mock document page featuring dark gradient shadow overlays,
