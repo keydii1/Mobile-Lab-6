@@ -5,12 +5,15 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.MotionEvent
 import android.view.View
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +23,10 @@ import org.opencv.android.OpenCVLoader
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var currentBitmap: Bitmap? = null
+    private var originalBitmap: Bitmap? = null
+    private var processedBitmap: Bitmap? = null
+    private var isShowingOriginal = false
+
 
     // Register Activity Result Launcher for selecting image from Gallery
     private val selectImageLauncher = registerForActivityResult(
