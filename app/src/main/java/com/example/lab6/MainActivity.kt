@@ -99,9 +99,25 @@ class MainActivity : AppCompatActivity() {
             resetSliders()
         }
 
+        binding.ivFiltered.setOnClickListener {
+            val orig = originalBitmap
+            val proc = processedBitmap
+            if (orig != null && proc != null) {
+                isShowingOriginal = !isShowingOriginal
+                if (isShowingOriginal) {
+                    binding.ivFiltered.setImageBitmap(orig)
+                    Toast.makeText(this, "Quick View: Original", Toast.LENGTH_SHORT).show()
+                } else {
+                    binding.ivFiltered.setImageBitmap(proc)
+                    Toast.makeText(this, "Quick View: Processed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         // Load default Book Page template at startup
         loadSampleBookPage()
     }
+
 
 
     /**
