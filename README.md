@@ -1,66 +1,114 @@
-# Mobile Development - Lab 6 (OpenCV Document Filter)
+# 📱 OpenCV Document Filter App (Mobile Lab 6)
 
-Ứng dụng Android (Kotlin) thực hiện bài tập thực hành của môn học **Mobile Development (Lab 6)**. Dự án được thiết kế với giao diện Dark Mode hiện đại, hiệu ứng bo góc mượt mà và gam màu HSL thiết kế chuẩn Premium để xử lý ảnh tài liệu, loại bỏ hoàn toàn bóng đổ (Shadow Removal) bằng thư viện xử lý ảnh hàng đầu **OpenCV**.
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-purple.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.9.0-blue.svg?style=flat&logo=opencv)](https://opencv.org)
+[![Material 3](https://img.shields.io/badge/UI-Material_3-emerald.svg?style=flat)](https://m3.material.io)
 
-## 🔗 GitHub Repository
-*   **Repository URL:** [https://github.com/keydii1/Mobile-Lab-6](https://github.com/keydii1/Mobile-Lab-6)
-*   **Tác giả:** Ho Hoang Son (hoson2k5@gmail.com)
+Một ứng dụng Android hiện đại được phát triển bằng ngôn ngữ **Kotlin** và thư viện **OpenCV SDK 4.9.0** nhằm loại bỏ bóng đổ (Shadow Removal) trên tài liệu và tự động bẻ cong độ tương phản để tạo ra các bản quét cực kỳ sắc nét. 
 
----
-
-## 🛠️ Công nghệ sử dụng (Tech Stack)
-*   **Ngôn ngữ:** Kotlin
-*   **UI/UX:** XML Layouts, Material Design 3, Gradient Backgrounds, Custom UI Cards, Progress indicators
-*   **Xử lý ảnh:** **OpenCV SDK 4.9.0** (Tích hợp hiện đại thông qua Maven Central)
-*   **Quản lý luồng:** Java SingleThreadExecutor & Android Handler (Xử lý tác vụ nặng ở luồng nền tránh đơ UI, trả kết quả về UI Thread an toàn)
+Dự án được thiết kế chuẩn **Premium UX/UI** với giao diện **Dark Mode** thời thượng, hiệu ứng bo góc mượt mà, cấu trúc đổ màu HSL bắt mắt và khả năng tương tác nâng cao với các thanh trượt thông số thời gian thực.
 
 ---
 
-## 📂 Các chức năng nổi bật trong ứng dụng
+## 📸 Giao diện ứng dụng & Tính năng nổi bật
 
-Dự án tích hợp đầy đủ các chức năng xử lý ảnh tài liệu thông minh thông qua màn hình điều hướng Dashboard trung tâm (`MainActivity`):
+### 1. Đa dạng hóa Tài liệu mẫu (Smart Sample Generators)
+Ứng dụng tích hợp bộ tạo ảnh tài liệu giả lập chất lượng cao với các lớp bóng đổ ngẫu nhiên phức tạp để người dùng thử nghiệm ngay lập tức:
+*   **Trang Sách (Book Page):** Giả lập trang sách trắng tiêu chuẩn với bóng đổ dạng dải màu tuyến tính chéo từ camera điện thoại.
+*   **Hóa Đơn Nhiệt (Thermal Receipt):** Giả lập hóa đơn khổ dọc màu kem nhạt, văn bản font chữ nhỏ đứt nét và bóng đổ hình tròn (Spotlight) từ đèn bàn.
+*   **Ghi Chú Ô Ly (Grid Note):** Giả lập ghi chú viết tay trên nền giấy tập học sinh màu vàng nhạt có các đường kẻ ô ly màu xanh lam, đi kèm bóng đổ chồng chéo phức tạp từ nhiều nguồn sáng.
 
-### 1. Tích hợp OpenCV SDK hiện đại
-*   Thay vì phải cấu hình module thủ công phức tạp và lỗi thời bằng tệp zip SDK tải ngoài, dự án được tích hợp **OpenCV 4.9.0** trực tiếp thông qua **Maven Central** bằng cách khai báo:
-    ```kotlin
-    implementation("org.opencv:opencv:4.9.0")
-    ```
-*   Khởi tạo động OpenCV tại thời điểm khởi chạy ứng dụng bằng `OpenCVLoader.initDebug()`, cung cấp thông báo tức thì về trạng thái tải thư viện.
+### 2. Bảng điều khiển nâng cao (Advanced Tuning Controls)
+Người dùng có thể tinh chỉnh thuật toán native của OpenCV thông qua các thanh trượt trực quan:
+*   **Dilation Kernel Size (1 - 25 px):** Kích thước nhân nở ảnh để ước lượng vùng nền trắng và xóa chữ.
+*   **Median Blur Size (3 - 51 px, luôn là số lẻ):** Độ lớn hạt lọc nhiễu trung vị để làm mịn dải bóng đổ nền.
+*   **Binarization Block Size (3 - 99 px, luôn là số lẻ):** Kích thước vùng lân cận cho bộ lọc nhị phân thích nghi (chỉ hiện khi chọn chế độ Adaptive B&W).
+*   **Constant C Offset (-20.0 đến +20.0):** Hằng số hiệu chỉnh độ sáng nền trừ đi từ giá trị trung bình có trọng số (chỉ hiện khi chọn chế độ Adaptive B&W).
 
-### 2. Thuật toán khử bóng đổ tài liệu chuyên sâu (`ShadowRemovalFilter.kt`)
-Triển khai thuật toán xử lý ảnh số dựa trên gợi ý từ bài học (Slide 7-8) bằng ngôn ngữ **Kotlin** tối ưu:
-1.  **Chuyển đổi không gian màu:** Chuyển đổi từ `RGB` sang `HSV` để tách biệt thông tin độ sáng (Value - V) khỏi màu sắc (Hue, Saturation).
-2.  **Ước lượng nền (Background Illumination):** 
-    *   Sử dụng phép nở ảnh `Imgproc.dilate` với nhân 7x7 nhằm ước lượng độ sáng nền và loại bỏ các chi tiết chữ đen nhỏ.
-    *   Áp dụng bộ lọc mờ trung vị `Imgproc.medianBlur` với kích thước hạt 21 để làm mịn dải bóng đổ, tạo ra bản đồ nền sáng bị lỗi.
-3.  **Khử bóng (Difference & Invert):**
-    *   Tính toán sự khác biệt tuyệt đối `Core.absdiff` giữa kênh V gốc và kênh V nền mờ để xác định bóng.
-    *   Đảo ngược ảnh bằng `Core.bitwise_not` để chuyển vùng chữ về màu đen gốc trên nền sáng.
-4.  **Chuẩn hóa tương phản:** Áp dụng `Core.normalize` kéo giãn độ tương phản về dải chuẩn [0, 255] nhằm tối ưu hóa độ trắng của nền giấy và độ sắc nét của chữ.
-5.  **Tái cấu trúc:** Ghép (merge) kênh V đã làm sạch với kênh H & S ban đầu, sau đó chuyển ngược về không gian màu `RGB` và xuất lại định dạng `Bitmap` của Android.
-6.  **Tối ưu hiệu năng:** Toàn bộ tiến trình native Mat của OpenCV đều được gọi hàm `.release()` giải phóng bộ nhớ C++ ngay khi xử lý xong nhằm loại bỏ triệt để nguy cơ rò rỉ bộ nhớ (native memory leak).
-
-### 3. Trải nghiệm người dùng thông minh (Wow Factors)
-*   **Trình sinh tài liệu mẫu thông minh (`btnLoadSample`):** Tự động vẽ và tạo ra một trang tài liệu văn bản giả lập cực nét bằng canvas, sau đó phủ lên một lớp gradient đổ bóng chéo vô cùng chân thực (như bóng đổ của điện thoại khi chụp tài liệu). Giúp người dùng test ngay tính năng khử bóng tức thì mà không cần chuẩn bị sẵn ảnh.
-*   **Chọn ảnh từ Thư viện (`btnSelectImage`):** Cho phép người dùng tự chụp hoặc chọn bất kỳ bức ảnh cuốn sách, tài liệu nào từ máy điện thoại thông qua `ActivityResultContracts` hiện đại.
-*   **Màn hình so sánh trực quan:** Thiết kế thẻ ảnh Gốc (Original Card) và ảnh Đã lọc (Processed Card) cạnh nhau, giúp người dùng so sánh ngay lập tức hiệu quả khử bóng tuyệt vời của thuật toán.
-*   **Đồng hồ chờ trực quan:** Khi nhấn chạy bộ lọc, một ProgressBar vòng tròn sẽ tự động xoay và vô hiệu hóa nút bấm tạm thời để thể hiện trạng thái xử lý bất đồng bộ mượt mà.
+### 3. Trải nghiệm Wow Factors (Visual Excellence)
+*   **Chạm & Giữ để So Sánh (Hold to Compare):** Thiết kế nút so sánh (hình con mắt). Chỉ cần chạm và giữ để xem nhanh tài liệu gốc trước khi khử bóng, nhấc tay ra để quay lại kết quả đã lọc.
+*   **Chạm trực tiếp vào Ảnh (Tap-to-Compare):** Nhấn trực tiếp lên thẻ ảnh kết quả để chuyển đổi qua lại giữa ảnh gốc và ảnh đã xử lý chỉ với một chạm.
+*   **Thông số động cơ OpenCV (Real-time Engine Stats):** Hiển thị trực quan độ phân giải ảnh đầu vào và thời gian xử lý chi tiết (ví dụ: `Execution Time: 34 ms`) để minh chứng cho hiệu năng xử lý bất đồng bộ native.
+*   **Hỗ trợ Song ngữ (Bilingual Localization):** Tự động chuyển đổi giao diện tiếng Anh và tiếng Việt dựa trên ngôn ngữ hệ thống của người dùng.
 
 ---
 
-## 🚀 Hướng dẫn cài đặt & Chạy ứng dụng
+## 🛠️ Thuật toán khử bóng đổ chuyên sâu (OpenCV Pipeline)
 
-### Bước 1: Mở dự án trong Android Studio
-1.  Khởi động **Android Studio** (Phiên bản khuyến nghị: Hedgehog 2023.3.1 hoặc mới hơn).
-2.  Chọn **File** -> **Open** và tìm đến thư mục chứa dự án: `/Users/hohoangson/Downloads/Lab6`.
-3.  Đợi Gradle đồng bộ và tải thư viện OpenCV tự động thông qua Maven Central.
+Thuật toán được triển khai trong tệp `ShadowRemovalFilter.kt` thực hiện chuỗi xử lý native C++ qua luồng nền `SingleThreadExecutor` nhằm giữ UI hoạt động mượt mà:
 
-### Bước 2: Build và Chạy máy ảo / Thiết bị thật
-1.  Đảm bảo máy ảo hoặc thiết bị chạy hệ điều hành Android API 26 trở lên (Android 8.0+).
-2.  Nhấn nút **Run** (Biểu tượng tam giác xanh lá) trên thanh công cụ của Android Studio để bắt đầu biên dịch và cài đặt.
+```mermaid
+graph TD
+    A[Bitmap gốc] --> B[Chuyển đổi sang Mat RGBA]
+    B --> C[Chuyển hệ màu RGB sang HSV]
+    C --> D[Tách kênh HSV thành H, S, V]
+    D --> E[Trích xuất kênh Độ sáng V - Value]
+    E --> F[Dilation với nhân kernel để ước lượng nền sáng]
+    F --> G[MedianBlur làm mịn dải bóng đổ nền]
+    G --> H[Core.absdiff tính sự khác biệt giữa V gốc và V nền]
+    H --> I[Core.bitwise_not đảo chữ về đen trên nền sáng]
+    I --> J[Core.normalize giãn tương phản về chuẩn 0, 255]
+    J --> K{Chọn chế độ bộ lọc}
+    
+    K -->|Color Filter| L[Ghép kênh V mới với H & S gốc]
+    L --> M[Chuyển HSV ngược về RGB]
+    
+    K -->|Grayscale Filter| N[Giữ nguyên kênh V đã chuẩn hóa]
+    
+    K -->|Otsu B&W Scan| O[Áp dụng Thresholding với THRESH_OTSU]
+    
+    K -->|Adaptive B&W| P[Áp dụng AdaptiveThreshold Gaussian]
+    
+    M --> Q[Convert Mat sang Bitmap]
+    N --> Q
+    O --> Q
+    P --> Q
+    Q --> R[Trả kết quả về UI Thread qua Handler]
+```
 
 ---
 
-## 📝 Bản quyền bài tập
+## 📂 Cấu trúc mã nguồn chính
+```text
+Mobile-Lab-6/
+├── app/
+│   ├── src/main/
+│   │   ├── java/com/example/lab6/
+│   │   │   ├── MainActivity.kt        # Khởi tạo OpenCV, quản lý UI/UX và render ảnh mẫu
+│   │   │   └── ShadowRemovalFilter.kt # Triển khai các thuật toán xử lý ảnh OpenCV native
+│   │   └── res/
+│   │       ├── drawable/              # Chứa các vector icons và custom layout drawables
+│   │       │   ├── ic_book.xml, ic_receipt.xml, ic_note.xml, ic_settings.xml
+│   │       │   ├── glass_card_background.xml, gradient_button_background.xml
+│   │       │   └── seekbar_thumb.xml, seekbar_track.xml
+│   │       ├── layout/
+│   │       │   └── activity_main.xml     # Layout Material 3 Dashboard tối ưu hóa Dark Mode
+│   │       ├── values/
+│   │       │   ├── colors.xml            # Định nghĩa các gam màu thiết kế chuẩn HSL Premium
+│   │       │   ├── strings.xml           # Nhãn hiển thị tiếng Anh mặc định
+│   │       │   └── themes.xml            # Khai báo theme Material 3 và cấu hình Seekbar
+│   │       └── values-vi/
+│   │           └── strings.xml           # Nhãn hiển thị tiếng Việt hóa hoàn toàn
+└── README.md
+```
+
+---
+
+## 🚀 Hướng dẫn cài đặt & Biên dịch nhanh
+
+### Điều kiện tiên quyết
+*   **Android Studio** Jellyfish 2024.1.1 hoặc mới hơn.
+*   **Android SDK:** API 26 trở lên (Android 8.0 Oreo+).
+*   Kết nối Internet để Gradle tự động đồng bộ thư viện từ Maven Central.
+
+### Các bước thực hiện
+1.  **Mở dự án:** Chọn **File -> Open** trong Android Studio và duyệt đến thư mục `Mobile-Lab-6`.
+2.  **Đồng bộ Gradle:** Gradle sẽ tự động tải thư viện OpenCV SDK 4.9.0 trực tiếp từ Maven Central.
+3.  **Chạy ứng dụng:** Kết nối thiết bị Android thật (đã bật gỡ lỗi USB) hoặc khởi chạy Máy ảo (AVD), sau đó click nút **Run** (biểu tượng tam giác xanh lục) trên thanh công cụ.
+
+---
+
+## 📝 Bản quyền và Đội ngũ phát triển
 *   **Giảng viên hướng dẫn:** Trần Vinh Khiêm
-*   **Đội ngũ phát triển tài liệu:** S3T - Smart Software System Team (01/03/2022)
+*   **Đội ngũ thiết kế tài liệu:** S3T - Smart Software System Team (01/03/2022)
+*   **Lập trình viên hoàn thiện UI/UX & Tính năng nâng cao:** Hồ Hoàng Sơn (hoson2k5@gmail.com)
