@@ -378,6 +378,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun resetSliders() {
+        binding.sbDilation.progress = 7
+        binding.sbMedianBlur.progress = 10
+        binding.sbBlockSize.progress = 6
+        binding.sbConstantC.progress = 30
+        binding.filterModeChipGroup.check(R.id.chipFilterColor)
+        binding.presetChipGroup.check(R.id.chipPresetBook)
+        Toast.makeText(this, "Parameters reset to default", Toast.LENGTH_SHORT).show()
+    }
+
     private fun setupComparison() {
         binding.btnCompare.setOnTouchListener { view, event ->
             val orig = originalBitmap
