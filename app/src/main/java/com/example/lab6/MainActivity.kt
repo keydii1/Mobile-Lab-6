@@ -378,6 +378,73 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun setupPresets() {
+        binding.presetChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (checkedIds.isEmpty()) return@setOnCheckedStateChangeListener
+            
+            when (checkedIds.first()) {
+                R.id.chipPresetBook -> {
+                    // Update Sliders
+                    binding.sbDilation.progress = 7
+                    binding.sbMedianBlur.progress = 10 // (10 * 2) + 1 = 21
+                    binding.filterModeChipGroup.check(R.id.chipFilterColor)
+                    
+                    // Hide adaptive sliders
+                    binding.layoutBlockSize.visibility = View.GONE
+                    binding.layoutConstantC.visibility = View.GONE
+                    
+                    // Generate Book Page Image
+                    loadSampleBookPage()
+                }
+                R.id.chipPresetReceipt -> {
+                    // Update Sliders
+                    binding.sbDilation.progress = 5
+                    binding.sbMedianBlur.progress = 5 // (5 * 2) + 1 = 11
+                    binding.filterModeChipGroup.check(R.id.chipFilterOtsu)
+                    
+                    // Hide adaptive sliders
+                    binding.layoutBlockSize.visibility = View.GONE
+                    binding.layoutConstantC.visibility = View.GONE
+                    
+                    // Generate Receipt Image
+                    loadSampleReceipt()
+                }
+                R.id.chipPresetNote -> {
+                    // Update Sliders
+                    binding.sbDilation.progress = 9
+                    binding.sbMedianBlur.progress = 15 // (15 * 2) + 1 = 31
+                    binding.filterModeChipGroup.check(R.id.chipFilterAdaptive)
+                    
+                    // Show adaptive sliders
+                    binding.sbBlockSize.progress = 11 // (11 * 2) + 3 = 25
+                    binding.sbConstantC.progress = 32 // 32 - 20 = 12.0
+                    binding.layoutBlockSize.visibility = View.VISIBLE
+                    binding.layoutConstantC.visibility = View.VISIBLE
+                    
+                    // Generate Note Image
+                    loadSampleGridNote()
+                }
+                R.id.chipPresetCustom -> {
+                    // Custom does not regenerate sample image, it just gives manual control
+                }
+            }
+        }
+
+        binding.filterModeChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (checkedIds.isEmpty()) return@setOnCheckedStateChangeListener
+            
+            // Toggle visibility of adaptive threshold parameters
+            if (checkedIds.first() == R.id.chipFilterAdaptive) {
+                binding.layoutBlockSize.visibility = View.VISIBLE
+                binding.layoutConstantC.visibility = View.VISIBLE
+            } else {
+                binding.layoutBlockSize.visibility = View.GONE
+                binding.layoutConstantC.visibility = View.GONE
+            }
+            binding.presetChipGroup.check(R.id.chipPresetCustom)
+        }
+    }
+
     private fun setupSeekBars() {
         // Dilation SeekBar
         binding.sbDilation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
