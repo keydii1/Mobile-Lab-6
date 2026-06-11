@@ -1,4 +1,36 @@
 <resources>
     <string name="app_name">Mobile Lab 6</string>
     <string name="title_activity_main">Android Document Filter</string>
+    
+    <!-- Presets Labels -->
+    <string name="lbl_presets">Select Preset Document Type</string>
+    <string name="preset_book">Book Page</string>
+    <string name="preset_receipt">Receipt</string>
+    <string name="preset_note">Grid Note</string>
+    <string name="preset_custom">Custom</string>
+    
+    <!-- Filter Modes -->
+    <string name="lbl_filter_mode">Image Processing Filter</string>
+    <string name="filter_color">Color Filter</string>
+    <string name="filter_gray">Grayscale Filter</string>
+    <string name="filter_binary">Otsu B&amp;W Scan</string>
+    <string name="filter_adaptive">Adaptive B&amp;W</string>
+    
+    <!-- Slider Labels -->
+    <string name="lbl_dilation_kernel">Dilation Kernel Size: %1$d</string>
+    <string name="lbl_median_blur">Median Blur Size: %1$d</string>
+    <string name="lbl_block_size">Binarization Block Size: %1$d</string>
+    <string name="lbl_constant_c">Constant C Offset: %1$.1f</string>
+    
+    <!-- Section Labels -->
+    <string name="lbl_adv_settings">Advanced Tuning Options</string>
+    <string name="lbl_performance_stats">OpenCV Engine Statistics</string>
+    <string name="lbl_resolution">Resolution: %1$d x %2$d px</string>
+    <string name="lbl_time_taken">Execution Time: %1$d ms</string>
+    
+    <!-- Button text -->
+    <string name="btn_apply_filter">Process Document Image</string>
+    <string name="btn_reset">Reset Tuning Parameters</string>
+    <string name="btn_compare_hold">Hold to View Original</string>
 </resources>
+
