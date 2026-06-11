@@ -390,8 +390,8 @@
                         android:max="25"
                         android:progress="7"
                         android:splitTrack="false"
-                        android:thumbTint="@color/primary"
-                        android:progressTint="@color/secondary"/>
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:progressDrawable="@drawable/seekbar_track"/>
                 </LinearLayout>
 
                 <!-- Median Blur Slider -->
@@ -418,8 +418,8 @@
                         android:max="51"
                         android:progress="21"
                         android:splitTrack="false"
-                        android:thumbTint="@color/primary"
-                        android:progressTint="@color/secondary"/>
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:progressDrawable="@drawable/seekbar_track"/>
                 </LinearLayout>
 
                 <!-- Adaptive Threshold Block Size Slider -->
@@ -447,8 +447,8 @@
                         android:max="99"
                         android:progress="15"
                         android:splitTrack="false"
-                        android:thumbTint="@color/primary"
-                        android:progressTint="@color/secondary"/>
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:progressDrawable="@drawable/seekbar_track"/>
                 </LinearLayout>
 
                 <!-- Adaptive Threshold Constant C Slider -->
@@ -476,8 +476,8 @@
                         android:max="40"
                         android:progress="30"
                         android:splitTrack="false"
-                        android:thumbTint="@color/primary"
-                        android:progressTint="@color/secondary"/>
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:progressDrawable="@drawable/seekbar_track"/>
                 </LinearLayout>
             </LinearLayout>
 
