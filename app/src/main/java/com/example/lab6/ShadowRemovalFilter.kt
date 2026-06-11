@@ -3,7 +3,9 @@ package com.example.lab6
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import org.opencv.android.Utils
+
 import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
@@ -32,6 +34,8 @@ object ShadowRemovalFilter {
         executor.execute {
             try {
                 val startTime = System.currentTimeMillis()
+                Log.d("ShadowRemovalFilter", "Applying filter: type=$filterType, dilation=$dilationSize, blur=$blurSize, blockSize=$blockSize, C=$constantC")
+
                 
                 // 1. Convert Bitmap to Mat (typically RGBA)
                 val srcArray = Mat()
